@@ -103,8 +103,8 @@ cfg.weightNormScaling = {'NGF_reduced': 1.0, 'ITS4_reduced': 1.0}
 # Synapses
 #------------------------------------------------------------------------------
 cfg.AMPATau2Factor = 1.0
-cfg.synWeightFractionEE = [0.5, 0.5] # E->E AMPA to NMDA ratio
-cfg.synWeightFractionEI = [0.5, 0.5] # E->I AMPA to NMDA ratio
+cfg.synWeightFractionEE = [0.5, 0.5] # E->E AMPA to NMDA ratio, previously 0.5 0.5
+cfg.synWeightFractionEI = [0.5, 0.5] # E->I AMPA to NMDA ratio, previously 0.5 0.5
 cfg.synWeightFractionSOME = [0.9, 0.1] # SOM -> E GABAASlow to GABAB ratio
 cfg.synWeightFractionNGF = [0.5, 0.5] # NGF GABAA to GABAB ratio
 cfg.synWeightFractionENGF = [0.834, 0.166] # NGF AMPA to NMDA ratio
@@ -187,7 +187,7 @@ cfg.rateBkg = {'exc': 40, 'inh': 40}
 cfg.EbkgThalamicGain = 4.0
 cfg.IbkgThalamicGain = 4.0
 
-cfg.cochlearThalInput = False #{'numCells': 200, 'freqRange': [9*1e3, 11*1e3], 'toneFreq': 10*1e3, 'loudnessDBs': 50}  # parameters to generate realistic  auditory thalamic inputs using Brian Hears 
+cfg.cochlearThalInput = {'numCells': 200, 'freqRange': [9*1e3, 11*1e3], 'toneFreq': 10*1e3, 'loudnessDBs': 50}  # parameters to generate realistic  auditory thalamic inputs using Brian Hears 
 
 # parameters to generate realistic cochlear + IC input ; weight =unitary connection somatic EPSP (mV)
 cfg.ICThalInput = {} #'file': 'data/ICoutput/ICoutput_CF_9600_10400_wav_01_ba_peter.mat', 
@@ -217,6 +217,7 @@ cfg.tune = {}
 #------------------------------------------------------------------------------
 # Set the baseline model parameters (remove this to use custom parameters)
 #------------------------------------------------------------------------------
+'''
 import json
 filename = '../data/v34_batch25/trial_2142/trial_2142_cfg.json'
 
@@ -240,3 +241,5 @@ with open(filename, 'rb') as f:
             cfg.__dict__.update({p: cfgLoad[p[0]][p[1]]})
         else:
             cfg.__dict__.update({p: cfgLoad[p]})
+
+'''

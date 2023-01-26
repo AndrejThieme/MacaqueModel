@@ -869,7 +869,7 @@ wmat['TCM']['NGF3']	    = TCMweight  # 0.25
 wmat['TCM']['PV5A']     = TCMweight  # 0.25 #* thalfctr
 wmat['TCM']['SOM5A']    = TCMweight  # 0.25 #* thalfctr
 wmat['TCM']['SOM5B']    = TCMweight  # 0.25 #* thalfctr
-wmat['TCM']['PV5B']	    = TCMweight  # 0.25 #* thalfctr
+wmat['TCM']['PV5B']	= TCMweight  # 0.25 #* thalfctr
 wmat['TCM']['SOM5B']    = TCMweight  # 0.25 #* thalfctr
 wmat['TCM']['NGF5B']    = TCMweight  # 0.25 #* thalfctr
 

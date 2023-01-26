@@ -189,13 +189,16 @@ def custom_spont(filename):
     params[('seeds', 'conn')] = list(range(1)) #[4321+(17*i) for i in range(5)]
     params[('seeds', 'stim')] = list(range(1)) #[1234+(17*i) for i in range(5)]
 
+    #params['ihGbar'] = [0.25, 0.5]
+    #params['KgbarFactor'] = [0.25, 0.5] 
+    
     groupedParams = [] 
 
     # --------------------------------------------------------
     # initial config
     initCfg = {} # set default options from prev sim
     
-    initCfg['duration'] = 11500
+    initCfg['duration'] = 3000 #11500
     initCfg['printPopAvgRates'] = [1500, initCfg['duration']] 
     initCfg['scaleDensity'] = 1.0
     initCfg['recordStep'] = 0.05
@@ -1344,15 +1347,6 @@ def optunaRatesLayersWmat():
     for pop in Epops:
         pops[pop] = Etune
     
-    ## Inh pops 
-    # Ipops = ['NGF1',                            # L1
-    #         'PV2', 'SOM2', 'VIP2', 'NGF2',      # L2
-    #         'PV3', 'SOM3', 'VIP3', 'NGF3',      # L3
-    #         'PV4', 'SOM4', 'VIP4', 'NGF4',      # L4
-    #         'PV5A', 'SOM5A', 'VIP5A', 'NGF5A',  # L5A  
-    #         'PV5B', 'SOM5B', 'VIP5B', 'NGF5B',  # L5B
-    #         'PV6', 'SOM6', 'VIP6', 'NGF6',       # L6
-    #         'IRE', 'IREM', 'TI']  # Thal 
     Ipops = ['NGF1',  
             'PV2', 'SOM2', 'VIP2', 'NGF2',      # L2
             'PV3', 'SOM3', 'VIP3', 'NGF3',      # L3
@@ -1480,7 +1474,19 @@ def setRunCfg(b, type='mpi_bulletin'):
             'mpiCommand': 'mpirun', # comet='ibrun', bridges='mpirun'
             'skip': True}
 
-
+    elif type=='hpc_slurm_cineca':
+        b.runCfg = {'type': 'hpc_slurm',
+                'allocation': 'icei_H_King', # bridges='ib4iflp', comet m1='shs100', comet nsg='csd403', gcp='default'
+            'walltime': '04:00:00', #'48:00:00',
+            'qos': 'noQOS',
+            'nodes': 1,
+            'coresPerNode': 32,  # comet=24, bridges=28, gcp=32
+            'email': 'andrej.thieme@campus.tu-berlin.de',
+            'folder': '/g100/home/userexternal/athieme0/Macaque_auditory_thalamocortical_model_data/model', 
+            'script': 'init.py',
+            'custom': '#SBATCH --partition=g100_usr_prod',
+            'mpiCommand': 'srun', # comet='ibrun', bridges,gcp='mpirun
+            'skip': True } #'nrniv -mpi -python', #'python3',
 
 # ----------------------------------------------------------------------------------------------
 # Main code
@@ -1490,16 +1496,11 @@ if __name__ == '__main__':
 
     cellTypes = ['IT2', 'PV2', 'SOM2', 'VIP2', 'NGF2', 'IT3', 'ITP4', 'ITS4', 'IT5A', 'CT5A', 'IT5B', 'PT5B', 'CT5B', 'IT6', 'CT6', 'TC', 'HTC', 'IRE', 'TI']
 
-    b = custom_spont('data/v34_batch25/trial_2142/trial_2142_cfg.json')
-    # b = optunaRatesLayersThalL12345A5B6()
-    # b = optunaRatesLayersWmat()
+    b = custom_spont('../data/v34_batch25/trial_2142/trial_2142_cfg.json')
 
-    # b = bkgWeights(pops = cellTypes, weights = list(np.arange(1,100)))
-    # b = fIcurve(pops=['ITS4']) 
+    b.batchLabel = 'v34_batch_default' 
+    b.saveFolder = 'data/sound/'+b.batchLabel
 
-    b.batchLabel = 'v34_batch68' 
-    b.saveFolder = 'data/'+b.batchLabel
-
-    setRunCfg(b, 'hpc_slurm_gcp') #'hpc_slurm_gcp') #'mpi_bulletin') #'hpc_slurm_gcp')
+    setRunCfg(b, 'hpc_slurm_cineca') #'hpc_slurm_gcp') #'mpi_bulletin') #'hpc_slurm_gcp')
     b.run() # run batch
 
